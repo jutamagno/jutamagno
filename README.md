@@ -10,6 +10,9 @@
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=flat&logo=duckdb&logoColor=black)
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazonaws&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)
+![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=flat&logo=elasticsearch&logoColor=white)
 
 I learn by building. Each project here is an attempt to understand a layer of the ML stack from the inside: how retrieval and ranking actually work, what a streaming feature store needs to handle drift, how causal uplift changes a bidding strategy, what makes a deployment pipeline safe to automate.
 
@@ -53,6 +56,13 @@ These aren't production systems — they're built to the spec of one. The goal i
 │  semantic drift      │     │  propagation · CLI viewer    │
 │  LLM metadata KG     │     └──────────────────────────────┘
 └──────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                          trustline                              │
+│  credit origination audit · BCB 538/2025 · LGPD compliance     │
+│  LLM fraud detection · correspondent risk scoring              │
+│  Bedrock · MongoDB · Kafka · ElasticSearch · Airflow DAGs      │
+└─────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────┐     ┌──────────────────────────────┐
 │     askmydata        │     │       watch-with-me          │
@@ -124,6 +134,10 @@ Shadow → canary → full deployment pipeline. PSI-based training data skew det
 
 ### Data governance
 
+**[trustline](https://github.com/jutamagno/trustline)** — Intelligent audit platform for credit origination data in banking.
+
+Built around a real problem: in 2025, banking correspondents faked customer consent to issue fraudulent consignado loans. Resolução BCB 538/2025 mandates compliance by December 2026. Trustline audits every origination event before credit is issued — three LLM-powered analyzers (inconsistency detection, consent chain verification, correspondent risk scoring), four Airflow DAGs (daily eval, daily risk scoring, daily BCB 538 report, weekly LGPD audit), and a continuous eval framework that tracks false negative rate, PII leakage, and Bedrock cost across a golden dataset of fraud scenarios. Stack: FastAPI · AWS Bedrock (Claude Haiku) · MongoDB · Kafka · ElasticSearch · PostgreSQL · Airflow · LocalStack · Helm (EKS).
+
 **[governa-flow](https://github.com/jutamagno/governa-flow)** — Data governance platform with LLM-based metadata reasoning.
 
 Semantic drift detection across dataset columns, trust propagation through a lineage graph (PII signals and quality scores flow downstream), and a KG-Agent pattern where an Ollama-backed LLM reasons over the governance knowledge graph. Integrates with OpenLineage and Airflow for pipeline-level lineage.
@@ -156,6 +170,8 @@ Upload a video or audio file, ask questions, get answers with precise `[HH:MM:SS
 
 **If you want the LLM/RAG projects** → [`watch-with-me`](https://github.com/jutamagno/watch-with-me) and [`askmydata`](https://github.com/jutamagno/askmydata) each run with `docker compose up --build`, no GPU required.
 
+**If you want the banking data governance project** → [`trustline`](https://github.com/jutamagno/trustline): `make up && make seed && make demo`. Runs the full stack locally via LocalStack (no real AWS needed).
+
 ---
 
 ## Stack
@@ -163,8 +179,8 @@ Upload a video or audio file, ask questions, get answers with precise `[HH:MM:SS
 | Area | Technologies |
 |---|---|
 | ML | PyTorch, scikit-learn, LightGBM, River (online learning), FAISS |
-| LLMs | Ollama (local inference), Claude API (offline label generation) |
-| Data | Kafka, Redis, DuckDB, Parquet, Avro, ChromaDB |
+| LLMs | Ollama (local inference), Claude API (offline label generation), AWS Bedrock (Claude Haiku) |
+| Data | Kafka, Redis, MongoDB, DuckDB, Parquet, Avro, ChromaDB, ElasticSearch |
 | Serving | FastAPI, Next.js 14, Docker Compose, SSE streaming |
 | MLOps | GitHub Actions, pytest, ruff, codecov, custom model registry |
 | Transcription | faster-whisper (CTranslate2 backend), yt-dlp |
