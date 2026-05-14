@@ -173,4 +173,4 @@ Upload a video or audio file, ask questions, get answers with precise `[HH:MM:SS
 
 ## Contact
 
-[LinkedIn](https://linkedin.com/in/jutamagno) · comprastamagno@gmail.com
+[LinkedIn](https://linkedin.com/in/jutamagno)
